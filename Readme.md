@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Марат Ахметзянов](https://up.htmlacademy.ru/javascript/17/user/972479).
-* Наставник: `Неизвестно`.
+* Наставник: `Дамир Рысаев`.
 
 ---
 
