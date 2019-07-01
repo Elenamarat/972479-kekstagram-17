@@ -68,7 +68,7 @@ var renderPicture = function (photo) {
 };
 
 var fragment = document.createDocumentFragment();
-for (var i = 0; i < photos.length; i++) {
+for (var i = 0; i < numberPhotos; i++) {
   fragment.appendChild(renderPicture(photos[i]));
 }
 
