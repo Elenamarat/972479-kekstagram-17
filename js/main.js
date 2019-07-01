@@ -60,7 +60,6 @@ var pictureUserTemplate = document.querySelector('#picture')
 
 var renderPicture = function (photo) {
   var pictureElement = pictureUserTemplate.cloneNode(true);
-
   pictureElement.querySelector('.picture__img').setAttribute('src', photo.url);
   pictureElement.querySelector('.picture__likes').textContent = photo.likes;
   pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
