@@ -25,6 +25,7 @@ var getUrl = function (number) {
 };
 
 var getComments = function (number) {
+  comments = [];
   for (var i = 0; i < number; i++) {
     comments[i] = {
       avatar: 'img/avatar-' + getRandom(1, 6) + '.svg',
