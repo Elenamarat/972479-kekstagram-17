@@ -138,7 +138,6 @@
   var getLevelEffect = function () {
     effectLevelPin.setAttribute('style', 'left: ' + effectLevel.value + '%');
     effectLevelDepth.setAttribute('style', 'width: ' + effectLevel.value + '%');
-    console.log(effectLevel.value);
   };
 
 })();
