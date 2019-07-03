@@ -89,7 +89,7 @@
 
     for (var i = 0; i < effects.length; i++) {
       classEffect = 'effects__preview--' + effects[i].value;
-      effectLevel.value = 60;
+      effectLevel.value = 100;
 
       if (effects[i].checked && i === 1) {
         previewPhoto.classList.toggle(classEffect);
