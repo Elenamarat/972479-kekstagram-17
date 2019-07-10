@@ -21,9 +21,10 @@
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
   var closeEditor = pictureOtherUsers.querySelector('.img-upload__cancel');
+  var inputComment = editorImg.querySelector('.text__description');
 
   var onEditorEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
+    if (evt.keyCode === ESC_KEYCODE && document.activeElement !== inputComment) {
       onEditorClose();
     }
   };
@@ -128,5 +129,16 @@
     effectLevelPin.setAttribute('style', 'left: ' + value + '%');
     effectLevelDepth.setAttribute('style', 'width: ' + value + '%');
   };
+
+  // Валидация поля "Комментарий" //
+
+  inputComment.addEventListener('input', function (evt) {
+    var target = evt.target;
+    if (target.value.length > 140) {
+      target.setCustomValidity('Длина комментария не должна составлять больше 140 символов');
+    } else {
+      target.setCustomValidity('');
+    }
+  });
 
 })();
