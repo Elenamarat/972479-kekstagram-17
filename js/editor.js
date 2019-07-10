@@ -15,9 +15,7 @@
     document.addEventListener('keydown', onEditorEscPress);
   };
 
-  uploadFile.addEventListener('change', function () {
-    onEditorOpen();
-  });
+  uploadFile.addEventListener('change', onEditorOpen);
 
   // Закрытие редактора фото //
   var ENTER_KEYCODE = 13;
@@ -36,9 +34,7 @@
     uploadFile.value = '';
   };
 
-  closeEditor.addEventListener('click', function () {
-    onEditorClose();
-  });
+  closeEditor.addEventListener('click', onEditorClose);
 
   closeEditor.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
@@ -68,76 +64,69 @@
     }
   };
 
-  smallerScalePhoto.addEventListener('click', function () {
-    onScaleReduce();
-  });
+  smallerScalePhoto.addEventListener('click', onScaleReduce);
 
-  biggerScalePhoto.addEventListener('click', function () {
-    onScaleIncrease();
-  });
+  biggerScalePhoto.addEventListener('click', onScaleIncrease);
 
   // Выбор эффекта для фото //
   var effectsList = pictureOtherUsers.querySelector('.effects__list');
   var effects = pictureOtherUsers.querySelectorAll('.effects__radio');
   var effectSlider = pictureOtherUsers.querySelector('.effect-level');
-  var effectLevel = pictureOtherUsers.querySelector('.effect-level__value');
-  var classEffect;
+  var effectLevel = pictureOtherUsers.querySelector('.effect-level__value').level;
 
   var onEffectSelect = function () {
-    effectLevel.value = 60;
-    getLevelEffect();
+    getLevelEffect(effectLevel);
 
     for (var i = 0; i < effects.length; i++) {
-      classEffect = 'effects__preview--' + effects[i].value;
-      effectLevel.value = 100;
+      var classEffect = 'effects__preview--' + effects[i].value;
+      effectLevel = 100;
 
+      if (effects[i].checked && i === 0) {
+        previewPhoto.classList.toggle('effects__preview--none');
+        previewPhoto.setAttribute('style', 'filter: none');
+        effectSlider.classList.add('hidden');
+      }
       if (effects[i].checked && i === 1) {
         previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: grayscale(' + (effectLevel.value / 100) + ')');
+        previewPhoto.setAttribute('style', 'filter: grayscale(' + (effectLevel / 100) + ')');
         effectSlider.classList.remove('hidden');
       }
 
       if (effects[i].checked && i === 2) {
         previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: sepia(' + (effectLevel.value / 100) + ')');
+        previewPhoto.setAttribute('style', 'filter: sepia(' + (effectLevel / 100) + ')');
         effectSlider.classList.remove('hidden');
       }
 
       if (effects[i].checked && i === 3) {
         previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: invert(' + effectLevel.value + '%)');
+        previewPhoto.setAttribute('style', 'filter: invert(' + effectLevel + '%)');
         effectSlider.classList.remove('hidden');
       }
 
       if (effects[i].checked && i === 4) {
         previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: blur(' + (3 * effectLevel.value / 100) + 'px)');
+        previewPhoto.setAttribute('style', 'filter: blur(' + (3 * effectLevel / 100) + 'px)');
         effectSlider.classList.remove('hidden');
       }
 
       if (effects[i].checked && i === 5) {
         previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: heat(' + (3 * effectLevel.value / 100) + ')');
+        previewPhoto.setAttribute('style', 'filter: heat(' + (3 * effectLevel / 100) + ')');
         effectSlider.classList.remove('hidden');
-      }
-
-      if (effects[i].checked && i === 0) {
-        effectSlider.classList.add('hidden');
       }
     }
   };
 
-  effectsList.addEventListener('click', function () {
-    onEffectSelect();
-  });
+  effectsList.addEventListener('click', onEffectSelect);
 
   // Выбор интенсивности эффекта для фото //
   var effectLevelPin = pictureOtherUsers.querySelector('.effect-level__pin');
   var effectLevelDepth = pictureOtherUsers.querySelector('.effect-level__depth');
 
-  var getLevelEffect = function () {
-    effectLevelPin.setAttribute('style', 'left: ' + effectLevel.value + '%');
-    effectLevelDepth.setAttribute('style', 'width: ' + effectLevel.value + '%');
+  var getLevelEffect = function (value) {
+    effectLevelPin.setAttribute('style', 'left: ' + value + '%');
+    effectLevelDepth.setAttribute('style', 'width: ' + value + '%');
   };
 
 })();
