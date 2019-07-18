@@ -76,7 +76,7 @@
   var effectLevel = pictureOtherUsers.querySelector('.effect-level__value').level;
 
   var onEffectSelect = function () {
-    getLevelEffect(effectLevel);
+    // onLevelPhoto(effectLevel); //
 
     for (var i = 0; i < effects.length; i++) {
       var classEffect = 'effects__preview--' + effects[i].value;
@@ -125,12 +125,60 @@
   var effectLevelPin = pictureOtherUsers.querySelector('.effect-level__pin');
   var effectLevelDepth = pictureOtherUsers.querySelector('.effect-level__depth');
 
-  var getLevelEffect = function (value) {
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var dragged = false;
+
+    // Код перемещения//
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      effectLevelPin.style.top = (effectLevelPin.offsetTop - shift.y) + 'px';
+      effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+
+      if (dragged) {
+        var onClickPreventDefault = function (evt) {
+          evt.preventDefault();
+          effectLevelPin.removeEventListener('click', onClickPreventDefault);
+        };
+        effectLevelPin.addEventListener('click', onClickPreventDefault);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    };
+  });
+
+/*
+  var onLevelPhoto = function (value) {
     effectLevelPin.setAttribute('style', 'left: ' + value + '%');
     effectLevelDepth.setAttribute('style', 'width: ' + value + '%');
-  };
+    */
 
-  // Валидация поля "Комментарий" //
+/* Валидация поля "Комментарий" //
 
   inputComment.addEventListener('input', function (evt) {
     var target = evt.target;
@@ -140,5 +188,6 @@
       target.setCustomValidity('');
     }
   });
+  */
 
 })();
