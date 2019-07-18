@@ -123,7 +123,7 @@
 
   // Выбор интенсивности эффекта для фото //
   var effectLevelPin = pictureOtherUsers.querySelector('.effect-level__pin');
-  var effectLevelDepth = pictureOtherUsers.querySelector('.effect-level__depth');
+  // var effectLevelDepth = pictureOtherUsers.querySelector('.effect-level__depth'); //
 
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -160,8 +160,8 @@
       document.removeEventListener('mouseup', onMouseUp);
 
       if (dragged) {
-        var onClickPreventDefault = function (evt) {
-          evt.preventDefault();
+        var onClickPreventDefault = function (Upevt) {
+          Upevt.preventDefault();
           effectLevelPin.removeEventListener('click', onClickPreventDefault);
         };
         effectLevelPin.addEventListener('click', onClickPreventDefault);
