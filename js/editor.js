@@ -75,6 +75,47 @@
   var effectSlider = pictureOtherUsers.querySelector('.effect-level');
   var effectLevel = pictureOtherUsers.querySelector('.effect-level__value').level;
 
+  // Выбор интенсивности эффекта для фото //
+  var effectLevelPin = pictureOtherUsers.querySelector('.effect-level__pin');
+  var effectLevelDepth = pictureOtherUsers.querySelector('.effect-level__depth'); //
+
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = evt.clientX;
+
+    var dragged = false;
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = startCoords - moveEvt.clientX;
+
+      startCoords = moveEvt.clientX;
+
+      effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift) + '%';
+      effectLevelDepth.setAttribute('style', 'width: ' + (effectLevelDepth.offsetLeft - shift) + '%');
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+
+      if (dragged) {
+        var onClickPreventDefault = function (Upevt) {
+          Upevt.preventDefault();
+          effectLevelPin.removeEventListener('click', onClickPreventDefault);
+        };
+        effectLevelPin.addEventListener('click', onClickPreventDefault);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    };
+  });
+
   var onEffectSelect = function () {
     // onLevelPhoto(effectLevel); //
 
@@ -120,57 +161,6 @@
   };
 
   effectsList.addEventListener('click', onEffectSelect);
-
-  // Выбор интенсивности эффекта для фото //
-  var effectLevelPin = pictureOtherUsers.querySelector('.effect-level__pin');
-  // var effectLevelDepth = pictureOtherUsers.querySelector('.effect-level__depth'); //
-
-  effectLevelPin.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
-
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    var dragged = false;
-
-    // Код перемещения//
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-
-      effectLevelPin.style.top = (effectLevelPin.offsetTop - shift.y) + 'px';
-      effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
-    };
-
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-
-      if (dragged) {
-        var onClickPreventDefault = function (Upevt) {
-          Upevt.preventDefault();
-          effectLevelPin.removeEventListener('click', onClickPreventDefault);
-        };
-        effectLevelPin.addEventListener('click', onClickPreventDefault);
-      }
-
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    };
-  });
 
 /*
   var onLevelPhoto = function (value) {
