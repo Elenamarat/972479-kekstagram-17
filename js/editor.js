@@ -73,7 +73,47 @@
   var effectsList = pictureOtherUsers.querySelector('.effects__list');
   var effects = pictureOtherUsers.querySelectorAll('.effects__radio');
   var effectSlider = pictureOtherUsers.querySelector('.effect-level');
-  var effectLevel = pictureOtherUsers.querySelector('.effect-level__value').level;
+  var effectLevel = pictureOtherUsers.querySelector('.effect-level__value').value;
+
+
+  var onEffectSelect = function () {
+    for (var i = 0; i < effects.length; i++) {
+
+      if (effects[i].checked) {
+        var classEffect = 'effects__preview--' + effects[i].value;
+        previewPhoto.classList.toggle(classEffect);
+
+        switch (effects[i].value) {
+          case 'none':
+            previewPhoto.setAttribute('style', 'filter: none');
+            break;
+          case 'chrome':
+            previewPhoto.setAttribute('style', 'filter: grayscale(' + (effectLevel / 100) + ')');
+            break;
+          case 'sepia':
+            previewPhoto.setAttribute('style', 'filter: sepia(' + (effectLevel / 100) + ')');
+            break;
+          case 'marvin':
+            previewPhoto.setAttribute('style', 'filter: invert(' + effectLevel + '%)');
+            break;
+          case 'phobos':
+            previewPhoto.setAttribute('style', 'filter: blur(' + (3 * effectLevel / 100) + 'px)');
+            break;
+          case 'heat':
+            previewPhoto.setAttribute('style', 'filter: heat(' + (3 * effectLevel / 100) + ')');
+            break;
+        }
+
+        if (effects[i].value === 'none') {
+          effectSlider.classList.add('hidden');
+        } else {
+          effectSlider.classList.remove('hidden');
+        }
+      }
+    }
+  };
+
+  effectsList.addEventListener('click', onEffectSelect);
 
   // Выбор интенсивности эффекта для фото //
   var effectLevelPin = pictureOtherUsers.querySelector('.effect-level__pin');
@@ -82,19 +122,17 @@
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    var startCoords = evt.clientX;
-
-    var dragged = false;
+    var startCoord = evt.clientX;
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = startCoords - moveEvt.clientX;
+      var shift = startCoord - moveEvt.clientX;
 
-      startCoords = moveEvt.clientX;
+      startCoord = moveEvt.clientX;
 
-      effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift) + '%';
-      effectLevelDepth.setAttribute('style', 'width: ' + (effectLevelDepth.offsetLeft - shift) + '%');
+      effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift) + 'px';
+      effectLevelDepth.style.left = (effectLevelDepth.offsetLeft - shift) + 'px';
     };
 
     var onMouseUp = function (upEvt) {
@@ -102,66 +140,11 @@
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-
-      if (dragged) {
-        var onClickPreventDefault = function (Upevt) {
-          Upevt.preventDefault();
-          effectLevelPin.removeEventListener('click', onClickPreventDefault);
-        };
-        effectLevelPin.addEventListener('click', onClickPreventDefault);
-      }
-
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
     };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
-
-  var onEffectSelect = function () {
-    // onLevelPhoto(effectLevel); //
-
-    for (var i = 0; i < effects.length; i++) {
-      var classEffect = 'effects__preview--' + effects[i].value;
-      effectLevel = 100;
-
-      if (effects[i].checked && i === 0) {
-        previewPhoto.classList.toggle('effects__preview--none');
-        previewPhoto.setAttribute('style', 'filter: none');
-        effectSlider.classList.add('hidden');
-      }
-      if (effects[i].checked && i === 1) {
-        previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: grayscale(' + (effectLevel / 100) + ')');
-        effectSlider.classList.remove('hidden');
-      }
-
-      if (effects[i].checked && i === 2) {
-        previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: sepia(' + (effectLevel / 100) + ')');
-        effectSlider.classList.remove('hidden');
-      }
-
-      if (effects[i].checked && i === 3) {
-        previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: invert(' + effectLevel + '%)');
-        effectSlider.classList.remove('hidden');
-      }
-
-      if (effects[i].checked && i === 4) {
-        previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: blur(' + (3 * effectLevel / 100) + 'px)');
-        effectSlider.classList.remove('hidden');
-      }
-
-      if (effects[i].checked && i === 5) {
-        previewPhoto.classList.toggle(classEffect);
-        previewPhoto.setAttribute('style', 'filter: heat(' + (3 * effectLevel / 100) + ')');
-        effectSlider.classList.remove('hidden');
-      }
-    }
-  };
-
-  effectsList.addEventListener('click', onEffectSelect);
-
 /*
   var onLevelPhoto = function (value) {
     effectLevelPin.setAttribute('style', 'left: ' + value + '%');
