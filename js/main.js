@@ -1,59 +1,13 @@
 'use strict';
 
 (function () {
-/*
-  var NOTES = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
-  var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  var numberPhotos = 25;
-  var numberLikes = 200;
-  var numberComments = 3;
 
-  var getRandom = function (min, max) {
-    return Math.floor(Math.random() * ((max + 1) - min)) + min;
-  };
-
-  var getUrl = function (number) {
-    var urls = [];
-    for (var i = 0; i < number; i++) {
-      urls[i] = i + 1;
-    }
-    urls.sort(function () {
-      return 0.5 - Math.random();
-    });
-
-    return urls;
-  };
-
-  var getComments = function (number) {
-    var comments = [];
-    for (var i = 0; i < number; i++) {
-      comments[i] = {
-        avatar: 'img/avatar-' + getRandom(1, 6) + '.svg',
-        message: NOTES[getRandom(0, NOTES.length - 1)],
-        name: NAMES[getRandom(0, NAMES.length - 1)]
-      };
-    }
-
-    return comments;
-  };
-
-  var getPhotos = function (number) {
-    var photos = [];
-    for (var i = 0; i < number; i++) {
-      photos[i] = {
-        url: 'photos/' + urls[i] + '.jpg',
-        likes: getRandom(15, numberLikes),
-        comments: getComments(getRandom(1, numberComments))
-      };
-    }
-
-    return photos;
-  };
-
-  var urls = getUrl(numberPhotos);
-  var photos = getPhotos(numberPhotos);
-*/
   var pictureOtherUsers = document.querySelector('.pictures');
+  var filterPicture = document.querySelector('.img-filters');
+  var filterPopular = filterPicture.querySelector('.img-filters__button--popular');
+  var filterNew = filterPicture.querySelector('.img-filters__button--new');
+  var filterDiscussed = filterPicture.querySelector('.img-filters__button--discussed');
+  var photos = [];
 
   var pictureUserTemplate = document.querySelector('#picture')
     .content
@@ -68,12 +22,46 @@
     return pictureElement;
   };
 
-  var successLoad = function (photos) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < photos.length; i++) {
-      fragment.appendChild(renderPicture(photos[i]));
+  var renderPhotos = function (pictures) {
+    pictureOtherUsers.innerHTML = '';
+    for (var i = 0; i < pictures.length; i++) {
+      pictureOtherUsers.appendChild(renderPicture(pictures[i]));
     }
-    pictureOtherUsers.appendChild(fragment);
+
+    filterPicture.classList.remove('img-filters--inactive');
+  };
+
+  filterPopular.addEventListener('click', function () {
+    window.debounce(renderPhotos(photos));
+  });
+
+  filterNew.addEventListener('click', function () {
+    var newPhotos = photos.slice();
+    newPhotos.sort(function () {
+      return 0.5 - Math.random();
+    });
+
+    window.debounce(renderPhotos(newPhotos.slice(0, 10)));
+  });
+
+  filterDiscussed.addEventListener('click', function () {
+    var photosCopy = photos.slice();
+    photosCopy.sort(function (first, second) {
+      if (first.comments.length < second.comments.length) {
+        return 1;
+      } else if (first.comments.length > second.comments.length) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+
+    window.debounce(renderPhotos(photosCopy));
+  });
+
+  var successLoad = function (data) {
+    photos = data;
+    renderPhotos(photos);
   };
 
   window.load(successLoad);
